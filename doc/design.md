@@ -1,0 +1,57 @@
+# Marquote Design
+
+This file serves as reminder and overview for myself. It gives an overview over the structure and design of the marquote module.
+
+## Purpose
+
+The marquote library should make it easy to build Markov Chains from text files. The library offers the option to store the parsed files in a database so that the parsing has to be done only once per file. 
+
+Additionally, parsed sentences may be tagged with a name, and Chains can then be generated using only parsed vocabulary tagged with a specific name. This permits the parsing of plays or screenplays and the generation of sentences for one specific character (e.g. Captain Picard or Hamlet).
+
+Since there is no single or common format for those text files, a parser has to be provided for the Chain Generator. The Marquote library comes with some parsers for common formats, others can be easily substituted. Furthermore the Chain Generator needs a backend, either to keep the parsed data in memory or to connect to a database of some sort. The Marquote library is distributed with an in-memory backend and an SQL-Backend.
+
+## Usage and Interface
+
+### Installing
+
+In time, Marquote will find its way to PyPI, until then, a stable version can be found on [Github](https://github.com/rixx/marquote) on the `master` branch.
+
+### Getting started
+
+First, include the module:
+
+    from marquote import Chain
+
+Then, include a backend and generate the controlling chain object:
+
+    from marquote.Backend import Inmem
+    chain = Chain(Inmem())
+
+or:
+
+    from marquote.Backend import SQL
+    chain = Chain(SQL(connection_string))
+
+### Parsing things
+
+Parsers should have a `parse` function taking the path to a file and the file's title as argument.
+
+    from marquote.Parser import StarTrekParser
+    chain.parser = StarTrekParser()
+    chain.parse("/path/to/file", "Encounter at Farpoint")
+
+### Generating sentences
+
+Give a source, a tag or nothing at all for random sentences. You may also provide a lookahead if you don't like the default value of 3.
+
+    chain.generate(source="Encounter at Farpoint", tag="Picard")
+    chain.generate(source="Star Trek", lookahead=2)
+    chain.generate()
+
+The `generate` function returns a string and ends with a `.`. This might change or become configurable in later versions.
+
+
+
+
+
+
