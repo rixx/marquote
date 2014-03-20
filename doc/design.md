@@ -29,7 +29,7 @@ Then, include a backend and generate the controlling chain object:
 
 or:
 
-    from marquote.Backend import SQL
+    from marquote.Backend import SQLBackend
     chain = Chain(SQL(connection_string))
 
 ### Parsing things
@@ -50,8 +50,19 @@ Give a source, a tag or nothing at all for random sentences. You may also provid
 
 The `generate` function returns a string and ends with a `.`. This might change or become configurable in later versions.
 
+## Modules
+
+### Chain
+
+The `chain` module provides the `Chain` class that acts as controller for backends and parsers. The `Chain` constructor requires a backend to be given as parameter.
+
+A `chain` object provides a `parse()` and a `generate()` functions. The `parse` function throws a `NotAvailableError` if `chain.parser` is `None`.
+
+### Backend
+
+The `backend` module provides several available backends, primarily `SQLBackend` and `InmemBackend`.
 
 
+### Parser
 
-
-
+The `parser` module provides a few parsers for common file formats. The provided parsers take a `test` argument (boolean). If the `test` argument is set to `True`, nothing will be written to the backend, instead everything that would have been written is printed to `STDOUT`.
