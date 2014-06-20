@@ -13,7 +13,7 @@ class Chain():
         The words are separated by " " and returned.
         
     """
-    def get(self, lookahead=3, source, character=None):
+    def get(self, source, lookahead=3, character=None):
         sentence = [self.backend.SENTENCE_START]
 
         #TODO: check if lookahead size is alright
@@ -28,11 +28,11 @@ class Chain():
         if not hasattr(self, 'parser'):
             return False
 
-        self.parser.source = inputfile
+        self.parser.source(inputfile)
 
         for sentence in self.parser.getnext():
-            sentence.insert(0, self.backend.SENTENCE_START)
-            sentence.append(self.backend.SENTENCE_END)
+            sentence.text.insert(0, self.backend.SENTENCE_START)
+            sentence.text.append(self.backend.SENTENCE_END)
 
-            self.backend.put(sentence, source)
+            self.backend.put(sentence.text, source, sentence.char)
 
