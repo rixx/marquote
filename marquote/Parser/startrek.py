@@ -1,3 +1,4 @@
+import re
 from bs4 import BeautifulSoup
 from urllib import request
 
@@ -14,21 +15,29 @@ class StarTrekParser():
               and line[0].isalpha() \
               and line[:line.find(':')].isupper():
                 char = line[:line.find(':')]
+                char = char[0] + char[1:].lower()
 
                 if char.find('[') != -1:
                     char = char[:char.find('[') - 1]
 
                 text = line[line.find(':') + 2:]
 
-                if text[0] == '(':
-                    text = text[text.find(')') + 2:]
+                for sentence in re.split('\. |\? |! ', text):
+                    if sentence:               
 
-                if text[-1].isalpha():
-                    text = text + "."
+                        if sentence[0] == '(':
+                            sentence = sentence[sentence.find(')') + 2:]
 
-                text = text.split()
+                    if sentence:
 
-                self.sentences.append(Sentence(text, char))
+                        if sentence[-1].isalpha():
+                            sentence = sentence + "."
+
+                        sentence = sentence.replace(',', '')
+                        sentence = sentence.split()
+
+                        if len(sentence) >= 4:
+                            self.sentences.append(Sentence(sentence, char))
 
 
     def get_next(self):
