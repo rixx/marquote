@@ -1,6 +1,7 @@
 
 
 class Chain():
+    parser = None
 
     def __init__(self, backend):
         self.backend = backend
@@ -25,12 +26,12 @@ class Chain():
         return " ".join(sentence[1:-1]) + "."
 
     def parse(self, inputfile, source):
-        if not hasattr(self, 'parser'):
+        if not self.parser:
             return False
 
         self.parser.source(inputfile)
 
-        for sentence in self.parser.getnext():
+        for sentence in self.parser.get_next():
             sentence.text.insert(0, self.backend.SENTENCE_START)
             sentence.text.append(self.backend.SENTENCE_END)
 
