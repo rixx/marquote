@@ -1,6 +1,8 @@
+import random
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship, backref, sessionmaker
+from sqlalchemy.sql import func
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -8,14 +10,36 @@ Base = declarative_base()
 class SQLBackend():
 
     def __init__(self, connect_string):
-        self.engine = create_engine(connect_string, echo=True)
+        self.engine = create_engine(connect_string, echo=False)
         self.Session = sessionmaker(bind=self.engine)
         Base.metadata.create_all(self.engine)
-        self.SENTENCE_START = '23'
-        self.SENTENCE_END = '42'
+        self.SENTENCE_START = '\r'
+        self.SENTENCE_END = '\n'
 
-    def get(self, wordlist, source, charakter):
-        pass
+    def get(self, start,  source, character):
+        lookahead = len(start)
+        session = self.Session()
+
+        qry_dict = {'series': self._get_simple(session, Series, title=source), \
+                    'character': self._get_simple(session, Character, name=character)}
+
+        for i in range(len(start)):
+            qry_dict['word' + str(i)] = self._get_simple(session, Word, word=start[i])
+
+        attr = getattr(Sentence, "word" + str(lookahead if lookahead <= len(start) else len(start)) + "_id")
+
+        results = session.query(func.sum(Sentence.count), attr).\
+                group_by(attr).\
+                filter_by(**qry_dict).all()
+
+        if results:
+            result = random.choice([val for cnt, val in results for i in range(int(cnt))])
+            result = self._get_simple(session, Word, id=result).word
+            return result
+        else:
+            print("ending")
+            return self.SENTENCE_END
+
 
     def put(self, sentence, source, character):
         session = self.Session()
@@ -102,7 +126,6 @@ class Sentence(Base):
     word5 = relationship("Word", foreign_keys=[word5_id])
     character = relationship("Character", foreign_keys=[char_id])
     series = relationship("Series", foreign_keys=[series_id])
-    
 
 
 class Series(Base):

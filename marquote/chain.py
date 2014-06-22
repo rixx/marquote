@@ -20,8 +20,8 @@ class Chain():
         #TODO: check if lookahead size is alright
 
         while sentence[-1] != self.backend.SENTENCE_END:
-            sentence.append(self.backend.get(sentence[-lookahead:], \
-                            source, character))
+            new_word = self.backend.get(sentence[-lookahead:], source, character)
+            sentence.append(new_word)
             
         return " ".join(sentence[1:-1]) + "."
 
