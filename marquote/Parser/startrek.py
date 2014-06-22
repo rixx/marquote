@@ -30,8 +30,8 @@ class StarTrekParser():
 
                     if sentence:
 
-                        if sentence[-1].isalpha():
-                            sentence = sentence + "."
+                        if re.match('\.|\?|!', sentence[-1]):
+                            sentence = sentence[:-1]
 
                         sentence = sentence.replace(',', '')
                         sentence = sentence.split()

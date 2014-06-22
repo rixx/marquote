@@ -37,3 +37,4 @@ class Chain():
 
             self.backend.put(sentence.text, source, sentence.char)
 
+#todo: strip . for insert
