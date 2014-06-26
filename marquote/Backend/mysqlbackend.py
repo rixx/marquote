@@ -20,8 +20,10 @@ class SQLBackend():
         lookahead = len(start)
         session = self.Session()
 
-        qry_dict = {'series': self._get_simple(session, Series, title=source), \
-                    'character': self._get_simple(session, Character, name=character)}
+        qry_dict = {'series': self._get_simple(session, Series, title=source)}
+
+        if character:
+            qry_dict['character'] = self._get_simple(session, Character, name=character)
 
         for i in range(len(start)):
             qry_dict['word' + str(i)] = self._get_simple(session, Word, word=start[i])
