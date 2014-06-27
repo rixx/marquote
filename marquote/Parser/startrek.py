@@ -4,7 +4,6 @@ from urllib import request
 
 class StarTrekParser():
 
-
     def source(self, url):
         self.sentences = []
         soup = BeautifulSoup(request.urlopen(url))
@@ -24,7 +23,6 @@ class StarTrekParser():
 
                 for sentence in re.split('\. |\? |! ', text):
                     if sentence:               
-
                         if sentence[0] == '(':
                             sentence = sentence[sentence.find(')') + 2:]
 
@@ -33,12 +31,11 @@ class StarTrekParser():
                         if re.match('\.|\?|!', sentence[-1]):
                             sentence = sentence[:-1]
 
-                        sentence = sentence.replace(',', '')
                         sentence = sentence.split()
 
-                        if len(sentence) >= 4:
-                            self.sentences.append(Sentence(sentence, char))
-
+                        if len(sentence) > 4:
+                            s = [s.lower() for s in sentence]
+                            self.sentences.append(Sentence(s, char))
 
     def get_next(self):
         for sentence in self.sentences:
