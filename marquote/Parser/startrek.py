@@ -1,10 +1,9 @@
 import re
-from bs4 import BeautifulSoup
 from urllib import request
+from bs4 import BeautifulSoup
 from marquote.Parser.base import Sentence, Parser
 
 class StarTrekParser(Parser):
-
 
     def source(self, url):
         soup = BeautifulSoup(request.urlopen(url))
@@ -38,6 +37,4 @@ class StarTrekParser(Parser):
 
                         if len(sentence) >= 4:
                             self.sentences.append(Sentence(sentence, char))
-
-
 
