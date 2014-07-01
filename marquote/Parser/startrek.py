@@ -1,6 +1,7 @@
 import re
 from bs4 import BeautifulSoup
 from urllib import request
+from marquote.Parser.base import Sentence
 
 class StarTrekParser():
 
@@ -44,7 +45,3 @@ class StarTrekParser():
         for sentence in self.sentences:
             yield sentence
 
-class Sentence():
-    def __init__(self, text, char):
-        self.text = text
-        self.char = char
