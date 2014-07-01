@@ -1,13 +1,12 @@
 import re
 from bs4 import BeautifulSoup
 from urllib import request
-from marquote.Parser.base import Sentence
+from marquote.Parser.base import Sentence, Parser
 
-class StarTrekParser():
+class StarTrekParser(Parser):
 
 
     def source(self, url):
-        self.sentences = []
         soup = BeautifulSoup(request.urlopen(url))
 
         for line in soup.get_text().splitlines():
@@ -41,7 +40,4 @@ class StarTrekParser():
                             self.sentences.append(Sentence(sentence, char))
 
 
-    def get_next(self):
-        for sentence in self.sentences:
-            yield sentence
 
