@@ -9,32 +9,39 @@ class StarTrekParser(Parser):
         soup = BeautifulSoup(request.urlopen(url))
 
         for line in soup.get_text().splitlines():
-            #nice2have: also parse $person's log entries
-            if line.find(':') != -1 \
-              and line[0].isalpha() \
-              and line[:line.find(':')].isupper():
-                char = line[:line.find(':')]
-                char = char[0] + char[1:].lower()
+            self._parse_line(line)
 
-                if char.find('[') != -1:
-                    char = char[:char.find('[') - 1]
+    def _parse_line(self, line):
+        #nice2have: also parse $person's log entries
 
-                text = line[line.find(':') + 2:]
+        # If the line starts with CHARACTER: text …
+        # (otherwise, it's irrelevant and doesn't need to be parsed)
+        colon = line.find(':')
 
-                for sentence in re.split('\. |\? |! ', text):
-                    if sentence:               
+        if colon != -1 and line[0].isalpha() and line[:colon].isupper():
+            char = line[:colon].capitalize()
+            text = line[colon + 2:]
 
-                        if sentence[0] == '(':
-                            sentence = sentence[sentence.find(')') + 2:]
+            # remove "[OC]" and similar from character
+            if char.find('[') != -1:
+                char = char[:char.find('[') - 1]
 
-                    if sentence:
+            for sentence in re.split('\. |\? |! ', text):
+                self._parse_sentence(sentence, char)
 
-                        if re.match('\.|\?|!', sentence[-1]):
-                            sentence = sentence[:-1]
+    def _parse_sentence(self, sentence, char):
+        # remove stage directions
+        if sentence:               
+            if sentence[0] == '(':
+                sentence = sentence[sentence.find(')') + 2:]
 
-                        sentence = sentence.replace(',', '')
-                        sentence = sentence.split()
+        # remove trailing punctuation
+        if sentence:
+            while re.match('\.|\?|!', sentence[-1]):
+                sentence = sentence[:-1]
 
-                        if len(sentence) >= 4:
-                            self.sentences.append(Sentence(sentence, char))
+            sentence = sentence.split()
+
+            if len(sentence) >= 4:
+                self.sentences.append(Sentence(sentence, char))
 
