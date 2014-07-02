@@ -30,7 +30,7 @@ class ShakespeareParser(Parser):
                             tab = line.find('\t')
                             temp_char = line[:tab]
                             remainder = self._parse_play_line(line[tab + 1:], \
-                                    temp_char, remainder)
+                                    temp_char, [])
                         elif temp_char and self._is_text(line):
                             remainder = self._parse_play_line(line.strip(), \
                                     temp_char, remainder)
@@ -52,7 +52,7 @@ class ShakespeareParser(Parser):
     def _parse_play_line(self, text, char, remainder):
         if text[0] == '[':
             text = text[text.find(']') + 1:]
-        if text.find(']' != -1):
+        if text.find(']') != -1:
             return remainder
 
         sentences = re.split('\. |\? |\! ', text)
