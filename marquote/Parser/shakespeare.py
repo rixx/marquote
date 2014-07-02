@@ -12,7 +12,7 @@ class ShakespeareParser(Parser):
         """ parses the plays found on 
         http://sydney.edu.au/engineering/it/~matty/Shakespeare/ """
         temp_char = ""
-        remainder = ""
+        remainder = []
         empty_line = False
         start = False
 
@@ -31,22 +31,46 @@ class ShakespeareParser(Parser):
                             temp_char = line[:tab]
                             remainder = self._parse_play_line(line[tab + 1:], \
                                     temp_char, remainder)
-                        else if temp_char and self._is_text(line):
+                        elif temp_char and self._is_text(line):
                             remainder = self._parse_play_line(line.strip(), \
                                     temp_char, remainder)
                         empty_line = False
 
-    def _is_next_character(line):
-        if line[0].isalpha() and line.fine('\t') != -1 and not "SCENE" in line:
+    def _is_next_character(self, line):
+        if line[0].isalpha() and line.find('\t') != -1 and not "SCENE" in line:
             return True
         else:
             return False
 
-    def _is_text(line):
+    def _is_text(self, line):
         if line[0] == '\t' and line[1] != '[':
             return True
         else:
             return False
+
+    def _parse_play_line(self, text, char, remainder):
+        if text[0] == '[':
+            text = text[text.find(']') + 1:]
+
+        sentences = re.split('\. |\? |\! ', text)
+        sentences = [sentence.lower().split() for sentence in sentences]
+        sentences[0] = remainder + sentences[0]
+
+        if sentences and sentences[0]:
+            if re.match('\.|\?|!', sentences[-1][-1][-1]):
+                end = len(sentences)
+                sentences[-1][-1] = sentences[-1][-1][:-1]
+            else:
+                end = len(sentences) - 1
+
+            for index in range(end -1, -1, -1):
+                self.sentences.append(Sentence(sentences[index], char))
+                del sentences[index]
+
+        if sentences:
+            return sentences[0]
+        else:
+            return []
 
     def parse_sonnets(self, filename):
         """ parses the sonnets found on Project Gutenberg """
