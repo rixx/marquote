@@ -37,13 +37,14 @@ class ShakespeareParser(Parser):
                         empty_line = False
 
     def _is_next_character(self, line):
-        if line[0].isalpha() and line.find('\t') != -1 and not "SCENE" in line:
+        if line and line[0].isalpha() and line.find('\t') != -1 \
+          and not "SCENE" in line:
             return True
         else:
             return False
 
     def _is_text(self, line):
-        if line[0] == '\t' and line[1] != '[':
+        if line[0] == '\t' and len(line) > 1:
             return True
         else:
             return False
