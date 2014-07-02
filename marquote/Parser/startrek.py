@@ -1,47 +1,47 @@
 import re
-from bs4 import BeautifulSoup
 from urllib import request
+from bs4 import BeautifulSoup
+from marquote.Parser.base import Sentence, Parser
 
-class StarTrekParser():
+class StarTrekParser(Parser):
 
-    def source(self, url):
-        self.sentences = []
+    def source(self, url, **kwargs):
         soup = BeautifulSoup(request.urlopen(url))
 
         for line in soup.get_text().splitlines():
-            #nice2have: also parse $person's log entries
-            if line.find(':') != -1 \
-              and line[0].isalpha() \
-              and line[:line.find(':')].isupper():
-                char = line[:line.find(':')]
-                char = char[0] + char[1:].lower()
+            self._parse_line(line)
 
-                if char.find('[') != -1:
-                    char = char[:char.find('[') - 1]
+    def _parse_line(self, line):
+        #nice2have: also parse $person's log entries
 
-                text = line[line.find(':') + 2:]
+        # If the line starts with CHARACTER: text …
+        # (otherwise, it's irrelevant and doesn't need to be parsed)
+        colon = line.find(':')
 
-                for sentence in re.split('\. |\? |! ', text):
-                    if sentence:               
-                        if sentence[0] == '(':
-                            sentence = sentence[sentence.find(')') + 2:]
+        if colon != -1 and line[0].isalpha() and line[:colon].isupper():
+            char = line[:colon].capitalize()
+            text = line[colon + 2:]
 
-                    if sentence:
+            # remove "[OC]" and similar from character
+            if char.find('[') != -1:
+                char = char[:char.find('[') - 1]
 
-                        if re.match('\.|\?|!', sentence[-1]):
-                            sentence = sentence[:-1]
+            for sentence in re.split('\. |\? |! ', text):
+                self._parse_sentence(sentence, char)
 
-                        sentence = sentence.split()
+    def _parse_sentence(self, sentence, char):
+        # remove stage directions
+        if sentence:               
+            if sentence[0] == '(':
+                sentence = sentence[sentence.find(')') + 2:]
 
-                        if len(sentence) > 4:
-                            s = [s.lower() for s in sentence]
-                            self.sentences.append(Sentence(s, char))
+        # remove trailing punctuation
+        if sentence:
+            while re.match('\.|\?|!', sentence[-1]):
+                sentence = sentence[:-1]
 
-    def get_next(self):
-        for sentence in self.sentences:
-            yield sentence
+            sentence = sentence.split()
 
-class Sentence():
-    def __init__(self, text, char):
-        self.text = text
-        self.char = char
+            if len(sentence) >= 4:
+                self.sentences.append(Sentence(sentence, char))
+

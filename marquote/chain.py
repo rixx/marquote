@@ -29,11 +29,11 @@ class Chain():
         return " ".join(sentence[1:-1]) + "."
             
 
-    def parse(self, inputfile, source):
+    def parse(self, inputfile, source, **kwargs):
         if not self.parser:
             return False
 
-        self.parser.source(inputfile)
+        self.parser.source(inputfile, **kwargs)
 
         for sentence in self.parser.get_next():
             sentence.text.insert(0, self.backend.SENTENCE_START)

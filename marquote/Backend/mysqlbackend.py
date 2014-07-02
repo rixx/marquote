@@ -39,7 +39,6 @@ class SQLBackend():
             result = self._get_simple(session, Word, id=result).word
             return result
         else:
-            print("ending")
             return self.SENTENCE_END
 
 
@@ -90,7 +89,6 @@ class SQLBackend():
             instance = model(**kwargs)
             session.add(instance)
             session.commit()
-            print("new " + str(model) + " " + str(kwargs))
 
         return instance
 
