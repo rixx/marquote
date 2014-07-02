@@ -9,21 +9,32 @@ class ShakespeareParser(Parser):
             self.parse_plays(filename)
 
     def parse_plays(self, filename):
-        """ parses the plays found on Project Gutenberg """
+        """ parses the plays found on 
+        http://sydney.edu.au/engineering/it/~matty/Shakespeare/ """
         temp_char = ""
         remainder = ""
+        empty_line = False
+        start = False
 
         with open(filename, "r") as f:
             for line in f:
-                if self._is_next_character(line):
-                    dot = line.find('.')
-                    temp_char = line[:dot].strip()
-                    remainder = self._parse_play_line(line[dot + 2:], \
-                            temp_char, remainder)
+                if not start:
+                    if "ACT I" in line:
+                        start = True
+                else:
+                    if not line or line.isspace():
+                        empty_line = True
 
-                elif self._is_text(line) and temp_char:
-                    remainder = self._parse_play_line(line.strip(), \
-                            temp_char, remainder)
+                    else:
+                        if empty_line and self._is_next_character(line):
+                            tab = line.find('\t')
+                            temp_char = line[:tab]
+                            remainder = self._parse_play_line(line[tab + 1:], \
+                                    temp_char, remainder)
+                        else if temp_char and self._is_text(line):
+                            remainder = self._parse_play_line(line.strip(), \
+                                    temp_char, remainder)
+                        empty_line = False
 
 
     def parse_sonnets(self, filename):
