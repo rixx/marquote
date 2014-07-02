@@ -92,20 +92,28 @@ def test_parse_play_line_regular_aside_one_sentence():
 
 def test_parse_play_line_remainder_half_sentence():
     parser.sentences = []
-    assert True
+    line = "Who like a good and hardy soldier fought"
+    r = ["this", "is", "the", "seargant"]
+    remainder = parser._parse_play_line(line, "MALCOLM", r)
+
+    assert (remainder == r + line.lower().split()) and (parser.sentences == [])
 
 def test_parse_play_line_remainder_one_sentence():
     parser.sentences = []
-    assert True
+    line = "in thunder, lightning, or in rain?"
+    r = ["when", "shall", "we", "three", "meet", "again"]
+    remainder = parser._parse_play_line(line, "First Witch", r)
+
+    assert (remainder == []) and (len(parser.sentences) == 1) \
+            and (parser.sentences[0].text == r + line[:-1].lower().split())
 
 def test_parse_play_line_remainder_two_sentences():
     parser.sentences = []
-    assert True
+    line = "'Gainst my captivity. Hail, brave friend!"
+    r = ["who", "like", "a", "good", "and", "hardy", "soldier", "fought"]
+    remainder = parser._parse_play_line(line, "MALCOLM", r)
 
-def test_parse_play_line_remainder_one_half_sentences():
-    parser.sentences = []
-    assert True
+    assert (remainder == []) and (len(parser.sentences) == 2) \
+            and (parser.sentences[1].text == r + line[:20].lower().split()) \
+            and (parser.sentences[0].text == line[22:-1].lower().split())
 
-def test_parse_play_line_remainder_two_half_sentences():
-    parser.sentences = []
-    assert True
