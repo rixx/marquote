@@ -51,6 +51,8 @@ class ShakespeareParser(Parser):
     def _parse_play_line(self, text, char, remainder):
         if text[0] == '[':
             text = text[text.find(']') + 1:]
+        if text.find(']' != -1):
+            return remainder
 
         sentences = re.split('\. |\? |\! ', text)
         sentences = [sentence.lower().split() for sentence in sentences]
