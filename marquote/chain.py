@@ -23,13 +23,16 @@ class Chain():
             new_word = self.backend.get(sentence[-lookahead:], source, character)
             sentence.append(new_word)
             
+        if sentence[1].islower():
+            sentence[1] = sentence[1].capitalize()
+
         return " ".join(sentence[1:-1]) + "."
 
-    def parse(self, inputfile, source):
+    def parse(self, inputfile, source, **kwargs):
         if not self.parser:
             return False
 
-        self.parser.source(inputfile)
+        self.parser.source(inputfile, **kwargs)
 
         for sentence in self.parser.get_next():
             sentence.text.insert(0, self.backend.SENTENCE_START)
