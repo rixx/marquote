@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 
 def test_first():
     from ..chain import Chain
-    from ..Parser.shakespeare import StarTrekParser
+    from ..Parser.startrek import StarTrekParser
     from ..Backend.mysqlbackend import SQLBackend
 
     soup = BeautifulSoup(urllib.request.urlopen("http://www.chakoteya.net/startrek/episodes.htm"))
