@@ -8,8 +8,23 @@ class ShakespeareParser(Parser):
         else:
             self.parse_plays(filename)
 
-    def parse_play(self, filename):
-        pass
+    def parse_plays(self, filename):
+        """ parses the plays found on Project Gutenberg """
+        temp_char = ""
+        remainder = ""
+
+        with open(filename, "r") as f:
+            for line in f:
+                if self._is_next_character(line):
+                    dot = line.find('.')
+                    temp_char = line[:dot].strip()
+                    remainder = self._parse_play_line(line[dot + 2:], \
+                            temp_char, remainder)
+
+                elif self._is_text(line) and temp_char:
+                    remainder = self._parse_play_line(line.strip(), \
+                            temp_char, remainder)
+
 
     def parse_sonnets(self, filename):
         """ parses the sonnets found on Project Gutenberg """
