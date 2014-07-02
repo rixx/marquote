@@ -36,6 +36,17 @@ class ShakespeareParser(Parser):
                                     temp_char, remainder)
                         empty_line = False
 
+    def _is_next_character(line):
+        if line[0].isalpha() and line.fine('\t') != -1 and not "SCENE" in line:
+            return True
+        else:
+            return False
+
+    def _is_text(line):
+        if line[0] == '\t' and line[1] != '[':
+            return True
+        else:
+            return False
 
     def parse_sonnets(self, filename):
         """ parses the sonnets found on Project Gutenberg """
