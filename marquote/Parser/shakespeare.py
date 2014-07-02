@@ -2,7 +2,17 @@ import re
 from marquote.Parser.base import Sentence, Parser
 
 class ShakespeareParser(Parser):
+    def source(self, filename, sonnets=False):
+        if sonnets:
+            self.parse_sonnets(filename)
+        else:
+            self.parse_plays(filename)
+
+    def parse_play(self, filename):
+        pass
+
     def parse_sonnets(self, filename):
+        """ parses the sonnets found on Project Gutenberg """
         temp_sentence = []
         with open(filename, "r") as f:
             for line in f:
@@ -25,5 +35,3 @@ class ShakespeareParser(Parser):
                     self.sentences.append(Sentence(temp_sentence, None))
                     temp_sentence = []
 
-    def source(self, filename):
-        self.parse_sonnets(filename)

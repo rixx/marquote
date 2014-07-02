@@ -5,7 +5,7 @@ from marquote.Parser.base import Sentence, Parser
 
 class StarTrekParser(Parser):
 
-    def source(self, url):
+    def source(self, url, **kwargs):
         soup = BeautifulSoup(request.urlopen(url))
 
         for line in soup.get_text().splitlines():
