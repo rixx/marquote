@@ -1,15 +1,20 @@
 import re
 from urllib import request
 from bs4 import BeautifulSoup
-from marquote.Parser.base import Sentence, Parser
+from marquote.Parser.base import Sentence, Parser, ProgressBar
 
 class StarTrekParser(Parser):
 
     def source(self, url, **kwargs):
         soup = BeautifulSoup(request.urlopen(url))
+        lines = soup.get_text().splitlines()
+        bar = ProgressBar(length=len(lines), name="Parsing "+url)
 
-        for line in soup.get_text().splitlines():
+        for line in lines:
+            bar.update()
             self._parse_line(line)
+
+        bar.done()
 
     def _parse_line(self, line):
         #nice2have: also parse $person's log entries
