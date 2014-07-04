@@ -25,7 +25,7 @@ class ProgressBar():
         self.length = length
         self.width = width
 
-    def update(self, new_length=None):
+    def update(self, new_length=None, done=False, detail=True):
         if not new_length:
             new_length = self.value + 1
 
@@ -41,6 +41,9 @@ class ProgressBar():
 
         if not done:
             self.bar += str(percent) + "%"
+            if detail:
+                self.bar += " (" + str(new_length) + "/" + str(self.length) \
+                        + str(")"
         else:
             self.bar += "[DONE]"
 
