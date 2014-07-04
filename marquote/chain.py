@@ -1,4 +1,4 @@
-
+from marquote.Parser.base import ProgressBar
 
 class Chain():
     parser = None
@@ -30,15 +30,19 @@ class Chain():
             
 
     def parse(self, inputfile, source, **kwargs):
-        if not self.parser:
+        try:
+            self.parser.source(inputfile, **kwargs)
+        except TypeError:
             return False
 
-        self.parser.source(inputfile, **kwargs)
+        bar = ProgressBar(name="Processing "+inputfile, length=len(self.parser))
 
         for sentence in self.parser.get_next():
             sentence.text.insert(0, self.backend.SENTENCE_START)
             sentence.text.append(self.backend.SENTENCE_END)
 
             self.backend.put(sentence.text, source, sentence.char)
+            bar.update()
 
-#todo: strip . for insert
+        bar.done()
+
