@@ -17,7 +17,7 @@ class Sentence():
 
 
 class ProgressBar():
-    def __init__(self, length, name="Progress", width=50):
+    def __init__(self, length, name="Progress", width=50, done=False):
         self.bar = "[" + " "*width + "] 0%"
         self.value = 0
         self.name = name
@@ -38,8 +38,15 @@ class ProgressBar():
         marked = int(percent * self.width / 100)
         self.bar = self.print_name
         self.bar += "[" + "=" * marked + " " * (self.width - marked) + "] "
-        self.bar += str(percent) + "%"
+
+        if not done:
+            self.bar += str(percent) + "%"
+        else:
+            self.bar += "[DONE]"
 
         print("\r" + self.bar, end="")
 
+    def done(self):
+        self.update(self.length, done=True)
+        print("")
 
