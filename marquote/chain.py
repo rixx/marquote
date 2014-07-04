@@ -1,4 +1,4 @@
-
+from Parser.base import ProgressBar
 
 class Chain():
     parser = None
@@ -34,11 +34,15 @@ class Chain():
             return False
 
         self.parser.source(inputfile, **kwargs)
+        bar = ProgressBar(name="Processing "+inputfile, length=len(self.parser))
 
         for sentence in self.parser.get_next():
             sentence.text.insert(0, self.backend.SENTENCE_START)
             sentence.text.append(self.backend.SENTENCE_END)
 
             self.backend.put(sentence.text, source, sentence.char)
+            bar.update()
+
+        bar.done()
 
 #todo: strip . for insert
