@@ -29,6 +29,9 @@ class ProgressBar():
         if not new_length:
             new_length = self.value + 1
 
+        if new_length > self.length:
+            new_length = self.length
+
         self.value = new_length
 
         percent = int(100 * new_length / self.length)
