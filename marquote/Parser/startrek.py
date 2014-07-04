@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from marquote.Parser.base import Sentence, Parser, ProgressBar
 
 class StarTrekParser(Parser):
-
+    name="hello"
     def source(self, url, **kwargs):
         soup = BeautifulSoup(request.urlopen(url))
         lines = soup.get_text().splitlines()

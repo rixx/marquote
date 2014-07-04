@@ -43,7 +43,7 @@ class ProgressBar():
             self.bar += str(percent) + "%"
             if detail:
                 self.bar += " (" + str(new_length) + "/" + str(self.length) \
-                        + str(")"
+                        + str(") ")
         else:
             self.bar += "[DONE]"
 
