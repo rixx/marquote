@@ -7,4 +7,4 @@ Marquote can save additional information about the speaker of a quote, making it
 
 Marquote requires Python 3.
 
-<!-- version 2: arbitrary metadata. "Englisches quote, from 1500 to 1800, please" ;) --> 
+<!-- version 2: arbitrary metadata. "English quote, from 1500 to 1800, please" ;) --> 
