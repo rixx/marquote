@@ -7,4 +7,10 @@ Marquote can save additional information about the speaker of a quote, making it
 
 Marquote requires Python 3.
 
+## Links
+
+I got my inspiration from the very clever [King James Programming](http://kingjamesprogramming.tumblr.com/) project aswell as [Charlie Stross' take](http://www.antipope.org/charlie/blog-static/2013/12/lovebiblepl.html) on the project.
+
+
+
 <!-- version 2: arbitrary metadata. "English quote, from 1500 to 1800, please" ;) --> 
