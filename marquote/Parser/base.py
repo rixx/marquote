@@ -45,7 +45,7 @@ class ProgressBar():
                 self.bar += " (" + str(new_length) + "/" + str(self.length) \
                         + str(") ")
         else:
-            self.bar += "[DONE]"
+            self.bar += " [DONE]"
 
         print("\r" + self.bar, end="")
 
