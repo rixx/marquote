@@ -1,5 +1,6 @@
 from marquote.Parser.base import ProgressBar
 
+
 class ChainGenerator():
     parser = None
 
@@ -9,10 +10,10 @@ class ChainGenerator():
     """ Gets a sentence with a given source and/or character aswell as
         configurable lookahead.
 
-        This basically wraps the get function of the backend. 
+        This basically wraps the get function of the backend.
         For each sequence of words it sends a request to the backend.
         The words are separated by " " and returned.
-        
+
     """
     def generate(self, source, lookahead=3, character=None):
         sentence = [self.backend.SENTENCE_START]
@@ -27,7 +28,7 @@ class ChainGenerator():
             sentence[1] = sentence[1].capitalize()
 
         return " ".join(sentence[1:-1]) + "."
-            
+
 
     def parse(self, inputfile, source, **kwargs):
         try:

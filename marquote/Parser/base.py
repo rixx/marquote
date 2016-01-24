@@ -1,4 +1,3 @@
-
 class Parser():
     sentences = []
 
@@ -52,4 +51,3 @@ class ProgressBar():
     def done(self):
         self.update(self.length, done=True)
         print("")
-

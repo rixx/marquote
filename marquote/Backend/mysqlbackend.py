@@ -1,11 +1,23 @@
 import random
-from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship, backref, sessionmaker
-from sqlalchemy.sql import func
+
+from sqlalchemy import (
+    create_engine,
+    Column,
+    ForeignKey,
+    Integer,
+    String,
+)
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import (
+    backref,
+    relationship,
+    sessionmaker
+)
+from sqlalchemy.sql import func
+
 
 Base = declarative_base()
+
 
 class SQLBackend():
 
@@ -16,7 +28,7 @@ class SQLBackend():
         self.SENTENCE_START = '\r'
         self.SENTENCE_END = '\n'
 
-    def get(self, start,  source, character):
+    def get(self, start, source, character):
         lookahead = len(start)
         session = self.Session()
 
@@ -41,7 +53,6 @@ class SQLBackend():
         else:
             return self.SENTENCE_END
 
-
     def put(self, sentence, source, character):
         session = self.Session()
         sentence.extend((None, None, None, None))
@@ -60,15 +71,15 @@ class SQLBackend():
 
     def _get_sentence(self, session, w0, w1, w2, w3, w4, w5, source, char):
 
-        word0=self._get_simple(session, Word, word=w0)
-        word1=self._get_simple(session, Word, word=w1)
-        word2=self._get_simple(session, Word, word=w2)
-        word3=self._get_simple(session, Word, word=w3)
-        word4=self._get_simple(session, Word, word=w4)
-        word5=self._get_simple(session, Word, word=w5)
-        character=self._get_simple(session, Character, name=char)
-        series=self._get_simple(session, Series, title=source)
-        
+        word0 = self._get_simple(session, Word, word=w0)
+        word1 = self._get_simple(session, Word, word=w1)
+        word2 = self._get_simple(session, Word, word=w2)
+        word3 = self._get_simple(session, Word, word=w3)
+        word4 = self._get_simple(session, Word, word=w4)
+        word5 = self._get_simple(session, Word, word=w5)
+        character = self._get_simple(session, Character, name=char)
+        series = self._get_simple(session, Series, title=source)
+
         test = session.query(Sentence).filter_by(word0=word0, word1=word1, word2=word2, word3=word3, word4=word4, word5=word5, series=series, character=character).first()
 
         if not test:
@@ -80,7 +91,6 @@ class SQLBackend():
             session.commit()
 
         return test
-
 
     def _get_simple(self, session, model, **kwargs):
         instance = session.query(model).filter_by(**kwargs).first()

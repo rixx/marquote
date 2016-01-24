@@ -1,10 +1,14 @@
 import re
 from urllib import request
+
 from bs4 import BeautifulSoup
+
 from marquote.Parser.base import Sentence, Parser, ProgressBar
 
+
 class StarTrekParser(Parser):
-    name="hello"
+    name = "hello"
+
     def source(self, url, **kwargs):
         soup = BeautifulSoup(request.urlopen(url))
         lines = soup.get_text().splitlines()
@@ -36,7 +40,7 @@ class StarTrekParser(Parser):
 
     def _parse_sentence(self, sentence, char):
         # remove stage directions
-        if sentence:               
+        if sentence:
             if sentence[0] == '(':
                 sentence = sentence[sentence.find(')') + 2:]
 
@@ -49,4 +53,3 @@ class StarTrekParser(Parser):
 
             if len(sentence) >= 4:
                 self.sentences.append(Sentence(sentence, char))
-

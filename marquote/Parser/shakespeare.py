@@ -1,5 +1,7 @@
 import re
+
 from marquote.Parser.base import Sentence, Parser, ProgressBar
+
 
 class ShakespeareParser(Parser):
     def source(self, filename, sonnets=False):
@@ -9,7 +11,7 @@ class ShakespeareParser(Parser):
             self.parse_plays(filename)
 
     def parse_plays(self, filename):
-        """ parses the plays found on 
+        """ parses the plays found on
         http://sydney.edu.au/engineering/it/~matty/Shakespeare/ """
         temp_char = ""
         remainder = []
@@ -43,17 +45,10 @@ class ShakespeareParser(Parser):
             bar.done()
 
     def _is_next_character(self, line):
-        if line and line[0].isalpha() and line.find('\t') != -1 \
-          and not "SCENE" in line:
-            return True
-        else:
-            return False
+        return line and line[0].isalpha() and line.find('\t') != -1 and not "SCENE" in line
 
     def _is_text(self, line):
-        if line[0] == '\t' and len(line) > 1:
-            return True
-        else:
-            return False
+        return line[0] == '\t' and len(line) > 1
 
     def _parse_play_line(self, text, char, remainder):
         if text[0] == '[':
@@ -104,4 +99,3 @@ class ShakespeareParser(Parser):
                     temp_sentence[-1] = temp_sentence[-1][:-1]
                     self.sentences.append(Sentence(temp_sentence, None))
                     temp_sentence = []
-
