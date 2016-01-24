@@ -9,7 +9,6 @@ from sqlalchemy import (
 )
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import (
-    backref,
     relationship,
     sessionmaker
 )
@@ -42,9 +41,11 @@ class SQLBackend():
 
         attr = getattr(Sentence, "word" + str(lookahead if lookahead <= len(start) else len(start)) + "_id")
 
-        results = session.query(func.sum(Sentence.count), attr).\
-                group_by(attr).\
-                filter_by(**qry_dict).all()
+        results = session\
+            .query(func.sum(Sentence.count), attr)\
+            .group_by(attr)\
+            .filter_by(**qry_dict)\
+            .all()
 
         if results:
             result = random.choice([val for cnt, val in results for i in range(int(cnt))])
@@ -60,11 +61,10 @@ class SQLBackend():
         for i in range(len(sentence) - 5):
             words = sentence[i:i+6]
 
-            entry = self._get_sentence(session, words[0], words[1], words[2], words[3],\
-                    words[4], words[5], source, character)
+            entry = self._get_sentence(session, words[0], words[1], words[2], words[3],
+                                       words[4], words[5], source, character)
 
             session.add(entry)
-
             entry.count += 1
 
         session.commit()
@@ -83,9 +83,9 @@ class SQLBackend():
         test = session.query(Sentence).filter_by(word0=word0, word1=word1, word2=word2, word3=word3, word4=word4, word5=word5, series=series, character=character).first()
 
         if not test:
-            test = Sentence(word0=word0, word1=word1, word2=word2, \
-                    word3=word3, word4=word4, word5=word5, \
-                    character=character, series=series, count=0)
+            test = Sentence(word0=word0, word1=word1, word2=word2,
+                            word3=word3, word4=word4, word5=word5,
+                            character=character, series=series, count=0)
 
             session.add(test)
             session.commit()

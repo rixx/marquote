@@ -21,7 +21,7 @@ class StarTrekParser(Parser):
         bar.done()
 
     def _parse_line(self, line):
-        #nice2have: also parse $person's log entries
+        # nice2have: also parse $person's log entries
 
         # If the line starts with CHARACTER: text …
         # (otherwise, it's irrelevant and doesn't need to be parsed)

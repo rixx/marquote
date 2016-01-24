@@ -18,7 +18,7 @@ class ChainGenerator():
     def generate(self, source, lookahead=3, character=None):
         sentence = [self.backend.SENTENCE_START]
 
-        #TODO: check if lookahead size is alright
+        # TODO: check if lookahead size is alright
 
         while sentence[-1] != self.backend.SENTENCE_END:
             new_word = self.backend.get(sentence[-lookahead:], source, character)
@@ -28,7 +28,6 @@ class ChainGenerator():
             sentence[1] = sentence[1].capitalize()
 
         return " ".join(sentence[1:-1]) + "."
-
 
     def parse(self, inputfile, source, **kwargs):
         try:
@@ -46,4 +45,3 @@ class ChainGenerator():
             bar.update()
 
         bar.done()
-

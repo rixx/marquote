@@ -1,7 +1,3 @@
-import re
-import urllib
-from bs4 import BeautifulSoup
-
 def test_first():
     from marquote.chain import Chain
     from marquote.Parser.startrek import StarTrekParser
@@ -24,4 +20,3 @@ def test_first():
     chain.parse(url + "42.htm", "TOS")
 
     assert True
-

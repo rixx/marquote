@@ -17,8 +17,7 @@ class ShakespeareParser(Parser):
         remainder = []
         empty_line = False
         start = False
-        bar = ProgressBar(length=sum(1 for line in open(filename)),\
-                name="Parsing " + filename)
+        bar = ProgressBar(length=sum(1 for line in open(filename)), name="Parsing " + filename)
 
         with open(filename, "r") as f:
             for line in f:
@@ -35,17 +34,15 @@ class ShakespeareParser(Parser):
                         if empty_line and self._is_next_character(line):
                             tab = line.find('\t')
                             temp_char = line[:tab]
-                            remainder = self._parse_play_line(line[tab + 1:], \
-                                    temp_char, [])
+                            remainder = self._parse_play_line(line[tab + 1:], temp_char, [])
                         elif temp_char and self._is_text(line):
-                            remainder = self._parse_play_line(line.strip(), \
-                                    temp_char, remainder)
+                            remainder = self._parse_play_line(line.strip(), temp_char, remainder)
                         empty_line = False
 
             bar.done()
 
     def _is_next_character(self, line):
-        return line and line[0].isalpha() and line.find('\t') != -1 and not "SCENE" in line
+        return line and line[0].isalpha() and line.find('\t') != -1 and "SCENE" not in line
 
     def _is_text(self, line):
         return line[0] == '\t' and len(line) > 1
@@ -67,7 +64,7 @@ class ShakespeareParser(Parser):
             else:
                 end = len(sentences) - 1
 
-            for index in range(end -1, -1, -1):
+            for index in range(end-1, -1, -1):
                 self.sentences.append(Sentence(sentences[index], char))
                 del sentences[index]
 
