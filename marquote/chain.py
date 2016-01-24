@@ -1,6 +1,6 @@
 from marquote.Parser.base import ProgressBar
 
-class Chain():
+class ChainGenerator():
     parser = None
 
     def __init__(self, backend):
@@ -14,7 +14,7 @@ class Chain():
         The words are separated by " " and returned.
         
     """
-    def get(self, source, lookahead=3, character=None):
+    def generate(self, source, lookahead=3, character=None):
         sentence = [self.backend.SENTENCE_START]
 
         #TODO: check if lookahead size is alright
